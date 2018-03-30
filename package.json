@@ -1,0 +1,25 @@
+{
+  "name": "hero",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apiai": "^2.0.5",
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "localtunnel": "^1.8.3",
+    "nodemon": "^1.17.2",
+    "request": "^2.72.0",
+    "uuid": "^2.0.3"
+  }
+}
