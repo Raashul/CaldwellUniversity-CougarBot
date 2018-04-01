@@ -1,10 +1,11 @@
-var express = require('express')
-var bodyParser = require('body-parser')
-var config = require('../config');
-var events = require('./events');
+const express = require('express')
+const bodyParser = require('body-parser')
+const config = require('../config');
+const events = require('./events');
 
 
-module.exports.getWebhook = function(req, res){
+
+module.exports.getWebhook = (req, res) => {
   if (req.query['hub.verify_token'] === config.FB_VERIFY_TOKEN) {
     res.send(req.query['hub.challenge'])
   }
@@ -13,6 +14,7 @@ module.exports.getWebhook = function(req, res){
 
 
 module.exports.postWebhook = (req, res) => {
+  console.log('request');
   // Parse the request body from the POST
   let body = req.body;
   // Check the webhook event is from a Page subscription

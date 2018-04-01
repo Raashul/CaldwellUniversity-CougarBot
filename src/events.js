@@ -1,21 +1,18 @@
-let config = require('../config');
-let message = require('./message');
-
-let apiAi = require('./apiai');
+const config = require('../config');
+const message = require('./message');
+const apiAi = require('./apiai');
 
 module.exports.handleMessage = (sender_psid, received_message, id) => {
   let response;
   console.log(received_message);
   // Checks if the message contains text
   if (received_message.text) {
-    let dummy = apiAi.sendToApiAi(received_message.text, id);
-
+    apiAi.sendToApiAi(received_message.text, id);
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
-    response = {
-      "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
-    }
-  } else if (received_message.attachments) {
+
+  }
+  else if (received_message.attachments) {
     // Get the URL of the message attachment
     let attachment_url = received_message.attachments[0].payload.url;
     response = {
@@ -46,7 +43,7 @@ module.exports.handleMessage = (sender_psid, received_message, id) => {
   }
 
   // Send the response message
-  message.callSendAPI(sender_psid, response);
+  // message.callSendAPI(sender_psid, response);
 }
 
 // Handles messaging_postbacks events
