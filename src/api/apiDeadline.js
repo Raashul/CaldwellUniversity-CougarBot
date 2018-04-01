@@ -1,6 +1,6 @@
 module.exports.deadline = (session) => {
 
-  if(session_apply === "Fall" || session_apply == 'fall'){
+  if(session === "Fall" || session == 'fall'){
     response = {
       'text': 'Regular Application for Fall Semester is due on June 1' +
                 '\n' +  '\n' +

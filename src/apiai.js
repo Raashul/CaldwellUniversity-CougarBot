@@ -15,10 +15,12 @@ module.exports.sendToApiAi =  (text, id) => {
 
   request.on('response',  function(response) {
 
+    //compare which intent to call depends on the action name
     const action = response.result.action;
     const parameter = response.result.parameters;
 
     switch(action){
+
       case "get-week-events":
         const date = handleWeekEvents(action, parameter);
         apiEvents.getEvents(date, (data) => {
@@ -35,6 +37,7 @@ module.exports.sendToApiAi =  (text, id) => {
         });
         break;
 
+      //scholarship intent
       case 'get-scholarship':
         response = {
           'text': response.result.fulfillment.speech
@@ -43,7 +46,6 @@ module.exports.sendToApiAi =  (text, id) => {
         break;
 
       // case 'get-major-info'
-
       case 'get-deadline':
         const session_apply = response.result.parameters.deadline_seassion;
         if(session_apply){
@@ -51,6 +53,7 @@ module.exports.sendToApiAi =  (text, id) => {
           //which session did he mention?
           response = apiDeadline.deadline(session_apply);
         }
+
         else{
           response = {
             'text': response.result.fulfillment.speech
@@ -60,12 +63,20 @@ module.exports.sendToApiAi =  (text, id) => {
         message.callSendAPI(id, response);
         break;
 
+      //display list of majors intent
+      case 'get-majors':
+        response = {
+          'text': response.result.fulfillment.speech
+        }
+        message.callSendAPI(id, response);
+        break;
+
       default:
         response = {
           "text": response.result.fulfillment.speech
         }
-        message.callSendAPI(id, response);
-
+    //send to facebook messenger
+    message.callSendAPI(id, response);
 
 
     }//end of switch

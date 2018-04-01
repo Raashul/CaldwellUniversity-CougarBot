@@ -1,10 +1,11 @@
-const config = require('../config/config');
 const message = require('./message');
 const apiAi = require('./apiai');
+const profile = require('./profile');
+
+const config = require('../config/config');
 
 module.exports.handleMessage = (sender_psid, received_message, id) => {
   let response;
-  console.log(received_message);
   // Checks if the message contains text
   if (received_message.text) {
     apiAi.sendToApiAi(received_message.text, id);
@@ -46,19 +47,28 @@ module.exports.handleMessage = (sender_psid, received_message, id) => {
   // message.callSendAPI(sender_psid, response);
 }
 
-// Handles messaging_postbacks events
-module.exports.handlePostback= (sender_psid, received_postback) => {
+//Handles messaging_postbacks events
+module.exports.handlePostback= async (sender_psid, received_postback) => {
   let response;
-
    // Get the payload for the postback
-   let payload = received_postback.payload;
+   let payload = received_postback.title;
 
-   // Set the response based on the postback payload
-   if (payload === 'yes') {
-     response = { "text": "Thanks!" }
-   } else if (payload === 'no') {
-     response = { "text": "Oops, try sending another image." }
+   // Get username
+   let user_info = await profile.getProfileDetails(sender_psid);
+
+
+   //Set the response based on the postback payload
+   if (payload === 'Get Started') {
+     response = [
+      {"text":`Hello ${user_info.first_name}.`},
+      {"text": "I am your Caldwell University smart assistant."},
+      {"text": "You can get college info, happening events, admission facts, and courses offered at Caldwell College."},
+      {"text": "Type hi to get started."}
+    ]
+    for(var i=0; i < response.length; i++){
+      await message.callSendAPI(sender_psid, response[i]);
+    }
+
    }
-   // Send the message to acknowledge the postback
-   message.callSendAPI(sender_psid, response);
+
 }

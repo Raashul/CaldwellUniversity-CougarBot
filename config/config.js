@@ -4,5 +4,5 @@ module.exports = {
     API_AI_CLIENT_ACCESS_TOKEN: '00c8d5a8d6c041d5b527034847d3f64d',
     FB_APP_SECRET: '7902c414e183c54786fbeb61523d1a5c',
     // SERVER_URL: "https://cougarapp.herokuapp.com/",
-    SERVER_URL: "https://twfirwyggc.localtunnel.me/",
+    SERVER_URL: "https://axgykfusqk.localtunnel.me/",
 };
