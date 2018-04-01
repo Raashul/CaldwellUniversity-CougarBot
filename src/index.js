@@ -25,7 +25,8 @@ module.exports.postWebhook = (req, res) => {
       // Get the webhook event. entry.messaging is an array, but
       // will only ever contain one event, so we get index 0
       let webhook_event = entry.messaging[0];
-      //console.log(webhook_event.sender);
+      console.log("Webhook event is: ");
+      console.log(entry.messaging);
 
 
       // Get the sender PSID
