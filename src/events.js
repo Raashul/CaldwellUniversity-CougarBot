@@ -1,4 +1,4 @@
-const config = require('../config');
+const config = require('../config/config');
 const message = require('./message');
 const apiAi = require('./apiai');
 

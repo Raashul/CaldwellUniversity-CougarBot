@@ -1,7 +1,9 @@
 const apiai = require('apiai');
-const config = require('../config');
+const config = require('../config/config');
 const message = require('./message');
+
 const apiEvents = require('./api/apiEvents');
+const apiDeadline = require('./api/apiDeadline');
 
 
 const apiAi = apiai(config.API_AI_CLIENT_ACCESS_TOKEN);
@@ -31,14 +33,42 @@ module.exports.sendToApiAi =  (text, id) => {
             }
           }
         });
+        break;
 
-        default:
+      case 'get-scholarship':
+        response = {
+          'text': response.result.fulfillment.speech
+        }
+        message.callSendAPI(id, response);
+        break;
+
+      // case 'get-major-info'
+
+      case 'get-deadline':
+        const session_apply = response.result.parameters.deadline_seassion;
+        if(session_apply){
+          //is user provided session information
+          //which session did he mention?
+          response = apiDeadline.deadline(session_apply);
+        }
+        else{
           response = {
-            "text": response.result.fulfillment.speech
+            'text': response.result.fulfillment.speech
           }
-          message.callSendAPI(id, response);
-    }
+        }
 
+        message.callSendAPI(id, response);
+        break;
+
+      default:
+        response = {
+          "text": response.result.fulfillment.speech
+        }
+        message.callSendAPI(id, response);
+
+
+
+    }//end of switch
   });
 
   request.on('error', function(error) {

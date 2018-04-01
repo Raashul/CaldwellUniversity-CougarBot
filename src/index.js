@@ -1,6 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const config = require('../config');
+const config = require('../config/config');
 const events = require('./events');
 
 
@@ -14,7 +14,6 @@ module.exports.getWebhook = (req, res) => {
 
 
 module.exports.postWebhook = (req, res) => {
-  console.log('request');
   // Parse the request body from the POST
   let body = req.body;
   // Check the webhook event is from a Page subscription
