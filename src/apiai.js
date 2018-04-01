@@ -33,12 +33,11 @@ module.exports.sendToApiAi =  (text, id) => {
         });
 
         default:
+          response = {
+            "text": response.result.fulfillment.speech
+          }
           message.callSendAPI(id, response);
     }
-
-
-
-    //
 
   });
 

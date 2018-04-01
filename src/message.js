@@ -1,5 +1,5 @@
-let request = require('request');
-let config = require('../config');
+const request = require('request');
+const config = require('../config');
 
 
 module.exports.callSendAPI = (sender_psid, response) => {
