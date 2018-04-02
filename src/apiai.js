@@ -71,6 +71,13 @@ module.exports.sendToApiAi =  (text, id) => {
         message.callSendAPI(id, response);
         break;
 
+      case 'account-locked':
+        response = {
+          'text': response.result.fulfillment.speech
+        }
+        message.callSendAPI(id, response);
+        break;
+
       default:
         response = {
           "text": response.result.fulfillment.speech
@@ -140,11 +147,8 @@ function handleWeekEvents(action, parameter){
 
 function handleEventData(items){
   let events = [];
-
   for(i=0; i< items.length; i++){
-
     events.push({summary: items[i].summary, date: items[i].start})
   }
-
   return events;
 }
