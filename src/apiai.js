@@ -4,16 +4,17 @@ const message = require('./message');
 
 const apiEvents = require('./api/apiEvents');
 const apiDeadline = require('./api/apiDeadline');
+const getInfo = require('./getInfo');
 
 
 const apiAi = apiai(config.API_AI_CLIENT_ACCESS_TOKEN);
 
-module.exports.sendToApiAi =  (text, id) => {
+module.exports.sendToApiAi = (text, id) => {
   var request =  apiAi.textRequest(text, {
       sessionId: id
   });
 
-  request.on('response',  function(response) {
+  request.on('response',  async function(response) {
 
     //compare which intent to call depends on the action name
     const action = response.result.action;
@@ -22,7 +23,7 @@ module.exports.sendToApiAi =  (text, id) => {
     switch(action){
 
       case "get-week-events":
-        const date = handleWeekEvents(action, parameter);
+        const date = handleWeekEvents(parameter);
         apiEvents.getEvents(date, (data) => {
           if(data.items.length != 0){
             const events = handleEventData(data.items);
@@ -37,14 +38,6 @@ module.exports.sendToApiAi =  (text, id) => {
         });
         break;
 
-      //scholarship intent
-      case 'get-scholarship':
-        response = {
-          'text': response.result.fulfillment.speech
-        }
-        message.callSendAPI(id, response);
-        break;
-
       // case 'get-major-info'
       case 'get-deadline':
         const session_apply = response.result.parameters.deadline_seassion;
@@ -53,30 +46,41 @@ module.exports.sendToApiAi =  (text, id) => {
           //which session did he mention?
           response = apiDeadline.deadline(session_apply);
         }
-
         else{
           response = {
             'text': response.result.fulfillment.speech
           }
         }
-
         message.callSendAPI(id, response);
         break;
 
-      //display list of majors intent
-      case 'get-majors':
-        response = {
-          'text': response.result.fulfillment.speech
+      //display library hours.
+      case 'get-library-hours':
+        let parameters = response.result.parameters
+        if (parameters.date == ""){
+          parameters.date = handleWeekEvents(parameters).current
         }
-        message.callSendAPI(id, response);
-        break;
+          body = await getInfo.getLibraryHours();
+          // console.log(body.locations[0].weeks[0].Sunday.date)
+          // console.log(response.result.parameters.date)
+          let week = body.locations[0].weeks[0]
+          let req_date = parameters.date
+          for(var key in week){
+            if(week[key].date === req_date){
+              response ={
+                'text': `Library: ${body.locations[0].name}\nDay: ${key}\nHours: ${week[key].rendered}`
+              }
+              break;
+            } else{
+              response ={
+                'text': "Sorry!! We can extract library hours of days within a week from today only."
+              }
+            }
+          }
+          message.callSendAPI(id, response);
+          break;
 
-      case 'account-locked':
-        response = {
-          'text': response.result.fulfillment.speech
-        }
-        message.callSendAPI(id, response);
-        break;
+
 
       default:
         response = {
@@ -102,7 +106,7 @@ module.exports.sendToApiAi =  (text, id) => {
   Get the current and next week date
   parse date into string
 */
-function handleWeekEvents(action, parameter){
+function handleWeekEvents(parameter){
 
   if(parameter.date == ''){
     let today = new Date();

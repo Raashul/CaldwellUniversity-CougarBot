@@ -1,6 +1,6 @@
 const message = require('./message');
 const apiAi = require('./apiai');
-const profile = require('./profile');
+const getInfo = require('./getInfo');
 
 const config = require('../config/config');
 
@@ -54,9 +54,9 @@ module.exports.handlePostback= async (sender_psid, received_postback) => {
    let payload = received_postback.title;
 
    // Get username
-   let user_info = await profile.getProfileDetails(sender_psid);
+   let user_info = await getInfo.getProfileDetails(sender_psid);
 
-
+   let i = 0;
    //Set the response based on the postback payload
    if (payload === 'Get Started') {
      response = [
@@ -65,10 +65,10 @@ module.exports.handlePostback= async (sender_psid, received_postback) => {
       {"text": "You can get college info, happening events, admission facts, and courses offered at Caldwell College."},
       {"text": "Type hi to get started."}
     ]
-    for(var i=0; i < response.length; i++){
+    for(i; i < response.length; i++){
       await message.callSendAPI(sender_psid, response[i]);
     }
+    }
 
-   }
 
 }
