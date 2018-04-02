@@ -66,7 +66,7 @@ module.exports.handlePostback= async (sender_psid, received_postback) => {
       {"text": "Type hi to get started."}
     ]
     for(var i=0; i < response.length; i++){
-      await message.callSendAPI(sender_psid, response[i]);
+       message.callSendAPI(sender_psid, response[i]);
     }
 
    }

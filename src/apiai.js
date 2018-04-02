@@ -4,6 +4,7 @@ const message = require('./message');
 
 const apiEvents = require('./api/apiEvents');
 const apiDeadline = require('./api/apiDeadline');
+const generalIntents = require('./api/generalIntents');
 
 
 const apiAi = apiai(config.API_AI_CLIENT_ACCESS_TOKEN);
@@ -37,14 +38,6 @@ module.exports.sendToApiAi =  (text, id) => {
         });
         break;
 
-      //scholarship intent
-      case 'get-scholarship':
-        response = {
-          'text': response.result.fulfillment.speech
-        }
-        message.callSendAPI(id, response);
-        break;
-
       // case 'get-major-info'
       case 'get-deadline':
         const session_apply = response.result.parameters.deadline_seassion;
@@ -53,31 +46,20 @@ module.exports.sendToApiAi =  (text, id) => {
           //which session did he mention?
           response = apiDeadline.deadline(session_apply);
         }
-
         else{
           response = {
             'text': response.result.fulfillment.speech
           }
-        }
-
-        message.callSendAPI(id, response);
-        break;
-
-      //display list of majors intent
-      case 'get-majors':
-        response = {
-          'text': response.result.fulfillment.speech
         }
         message.callSendAPI(id, response);
         break;
 
       default:
         response = {
-          "text": response.result.fulfillment.speech
-        }
-    //send to facebook messenger
-    message.callSendAPI(id, response);
-
+           "text": response.result.fulfillment.speech
+         }
+       //send to facebook messenger
+       message.callSendAPI(id, response);
 
     }//end of switch
   });
@@ -118,7 +100,6 @@ function handleWeekEvents(action, parameter){
       mm = '0' + mm;
     }
     if(next_dd < 10){
-
       next_dd = '0' + next_dd
     }
     if(next_mm < 10){
@@ -133,7 +114,6 @@ function handleWeekEvents(action, parameter){
       next: next_date
     }
     return date;
-
   }
 }
 
@@ -142,9 +122,7 @@ function handleEventData(items){
   let events = [];
 
   for(i=0; i< items.length; i++){
-
     events.push({summary: items[i].summary, date: items[i].start})
   }
-
   return events;
 }
