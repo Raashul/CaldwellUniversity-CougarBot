@@ -13,3 +13,15 @@ module.exports.getProfileDetails = (sender_psid) => {
     });
   });
 }
+
+module.exports.getLibraryHours = () => {
+  let url = "https://api3.libcal.com/api_hours_grid.php?iid=1425&format=json&weeks=1";
+  return new Promise(function(resolve, reject){
+    request({
+      url : url,
+      json: true
+    }, (error, response, body) => {
+      resolve(body)
+    });
+  });
+}

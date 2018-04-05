@@ -1,6 +1,7 @@
 const message = require('./message');
 const apiAi = require('./apiai');
-const profile = require('./profile');
+const getInfo = require('./getInfo');
+const broadcast = require('./broadcast');
 
 const config = require('../config/config');
 
@@ -8,9 +9,15 @@ module.exports.handleMessage = (sender_psid, received_message, id) => {
   let response;
   // Checks if the message contains text
   if (received_message.text) {
-    apiAi.sendToApiAi(received_message.text, id);
-    // Create the payload for a basic text message, which
-    // will be added to the body of our request to the Send API
+    let text = received_message.text;
+    if(sender_psid == config.ADMIN_ID && text.startsWith("@urgent")){
+      var urgent_message = text.substr(text.indexOf(' ')+1);
+      broadcast.broadCastFunc(urgent_message);
+    } else {
+      apiAi.sendToApiAi(text, id);
+      // Create the payload for a basic text message, which
+      // will be added to the body of our request to the Send API
+    }
 
   }
   else if (received_message.attachments) {
@@ -52,11 +59,8 @@ module.exports.handlePostback= async (sender_psid, received_postback) => {
   let response;
    // Get the payload for the postback
    let payload = received_postback.title;
-
    // Get username
-   let user_info = await profile.getProfileDetails(sender_psid);
-
-
+   let user_info = await getInfo.getProfileDetails(sender_psid);
    //Set the response based on the postback payload
    if (payload === 'Get Started') {
      response = [
@@ -65,10 +69,10 @@ module.exports.handlePostback= async (sender_psid, received_postback) => {
       {"text": "You can get college info, happening events, admission facts, and courses offered at Caldwell College."},
       {"text": "Type hi to get started."}
     ]
-    for(var i=0; i < response.length; i++){
+    for(let i=0; i < response.length; i++){
       await message.callSendAPI(sender_psid, response[i]);
     }
+    }
 
-   }
 
 }
