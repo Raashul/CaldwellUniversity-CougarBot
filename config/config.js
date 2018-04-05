@@ -3,6 +3,6 @@ module.exports = {
     FB_VERIFY_TOKEN: 'this_is_a_test',
     API_AI_CLIENT_ACCESS_TOKEN: '00c8d5a8d6c041d5b527034847d3f64d',
     FB_APP_SECRET: 'f3de2add0c4cfaab92962e3b2f41c25e',
-    ADMIN_ID: '1905377426202174',
-    SERVER_URL: "https://cougarapp.herokuapp.com/"
+    ADMIN_ID: '596933080430616', 
+    SERVER_URL: "https://hungry-panther-65.localtunnel.me/"
 };
