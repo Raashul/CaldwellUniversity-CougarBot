@@ -10,6 +10,7 @@ module.exports.handleMessage = (sender_psid, received_message, id) => {
   // Checks if the message contains text
   if (received_message.text) {
     let text = received_message.text;
+    console.log(sender_psid);
     if(sender_psid == config.ADMIN_ID && text.startsWith("@urgent")){
       var urgent_message = text.substr(text.indexOf(' ')+1);
       broadcast.broadCastFunc(urgent_message);
