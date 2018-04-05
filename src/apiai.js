@@ -21,9 +21,11 @@ module.exports.sendToApiAi = (text, id) => {
     const parameter = response.result.parameters;
 
     switch(action){
-
+      // case get-week -events.
       case "get-week-events":
         const date = handleWeekEvents(parameter);
+        console.log(date);
+        console.log(parameter);
         apiEvents.getEvents(date, (data) => {
           if(data.items.length != 0){
             const events = handleEventData(data.items);
