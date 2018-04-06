@@ -4,7 +4,7 @@
 <p>Messenger based chatbot that provides any Emergency notice, Admissions information, Happening Events, Library hours. <p>
 <h3>Work in progess... </h3>
 <p> Login website for the bot to collect class schedule database and notify individual suscribers about their homeworks or projects </p>
-<br>
+
 <h3>Built with</h3>
 
 <ul>
