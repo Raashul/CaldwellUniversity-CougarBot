@@ -1,10 +1,8 @@
 <h2> CougarBot </h2>
 <p> Caldwell University Smart Assistant <p>
-<br>
 <h3> Description </h3>
-
 <p>Messenger based chatbot that provides any Emergency notice, Admissions information, Happening Events, Library hours. <p> 
-<br> <br>
+<br>
 <h3>Built with</h3>
 <ul>
   <li>Node JS : Framework</li>
