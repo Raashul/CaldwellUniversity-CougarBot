@@ -17,8 +17,12 @@
     "apiai": "^2.0.5",
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
+    "fetch": "^1.1.0",
+    "localtunnel": "^1.9.0",
+    "node-fetch": "^2.1.2",
+    "nodemon": "^1.17.3",
     "package.json": "^2.0.1",
-    "request": "^2.72.0",
+    "request": "^2.85.0",
     "uuid": "^2.0.3"
   }
 }

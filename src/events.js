@@ -1,6 +1,7 @@
 const message = require('./message');
 const apiAi = require('./apiai');
 const profile = require('./profile');
+const fetch = require('node-fetch');
 
 const config = require('../config/config');
 
@@ -48,7 +49,7 @@ module.exports.handleMessage = (sender_psid, received_message, id) => {
 }
 
 //Handles messaging_postbacks events
-module.exports.handlePostback= async (sender_psid, received_postback) => {
+module.exports.handlePostback = async (sender_psid, received_postback) => {
   let response;
    // Get the payload for the postback
    let payload = received_postback.title;
@@ -59,15 +60,20 @@ module.exports.handlePostback= async (sender_psid, received_postback) => {
 
    //Set the response based on the postback payload
    if (payload === 'Get Started') {
-     response = [
-      {"text":`Hello ${user_info.first_name}.`},
-      {"text": "I am your Caldwell University smart assistant."},
-      {"text": "You can get college info, happening events, admission facts, and courses offered at Caldwell College."},
-      {"text": "Type hi to get started."}
-    ]
-    for(var i=0; i < response.length; i++){
-      await message.callSendAPI(sender_psid, response[i]);
-    }
+
+     response = {"text": `Hello ${user_info.first_name}.`};
+     response1 = {"text": "I am your Caldwell University smart assistant."};
+     response2 = {"text": "You can get college info, happening events, admission facts, and courses offered at Caldwell College."};
+     response3 = {"text": "Type hi to get started."};
+
+
+      message.callSendAPI(sender_psid, response).then(() =>{
+        return message.callSendAPI(sender_psid,response1).then(()=>{
+          return message.callSendAPI(sender_psid,response2).then(()=>{
+            return message.callSendAPI(sender_psid,response3);
+          });
+        });
+      });
 
    }
 
