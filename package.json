@@ -17,6 +17,8 @@
     "apiai": "^2.0.5",
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
+    "firebase": "^5.1.0",
+    "localtunnel": "^1.9.0",
     "package.json": "^2.0.1",
     "request": "^2.72.0",
     "uuid": "^2.0.3"

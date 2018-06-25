@@ -5,9 +5,11 @@ const message = require('./message');
 const apiEvents = require('./api/apiEvents');
 const apiDeadline = require('./api/apiDeadline');
 const getInfo = require('./getInfo');
-
-
+const db = require('./firebase/firebase');
+console.log(db.db);
 const apiAi = apiai(config.API_AI_CLIENT_ACCESS_TOKEN);
+
+let homeworkDesc = {courseName: '', deadline:{date:'',time:'',datePeriod:''}};
 
 module.exports.sendToApiAi = (text, id) => {
   var request =  apiAi.textRequest(text, {
@@ -19,7 +21,7 @@ module.exports.sendToApiAi = (text, id) => {
     //compare which intent to call depends on the action name
     const action = response.result.action;
     const parameter = response.result.parameters;
-
+    console.log(action);
     switch(action){
       // case get-week -events.
       case "get-week-events":
@@ -82,7 +84,37 @@ module.exports.sendToApiAi = (text, id) => {
           message.callSendAPI(id, response);
           break;
 
+      case 'get-homework-action':
 
+          response = {
+            "text": response.result.fulfillment.speech
+          };
+          message.callSendAPI(id, response);
+          break;
+
+      case 'get-homework-intent.get-homework-intent-custom':
+         homeworkDesc.courseName = response.result.parameters['homework-courses'];
+
+          response = {
+            "text": response.result.fulfillment.speech
+          };
+          message.callSendAPI(id, response);
+          break;
+
+      case 'get-homework-deadline-actions':
+        homeworkDesc.deadline = response.result.parameters;
+
+
+         response = {
+           "text": response.result.fulfillment.speech
+         };
+         message.callSendAPI(id, response);
+
+         db.db.ref('users/'+id).set({
+           course: homeworkDesc.courseName,
+           deadline: homeworkDesc.deadline
+         });
+         break;
 
       default:
         response = {
