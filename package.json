@@ -16,7 +16,9 @@
   "dependencies": {
     "apiai": "^2.0.5",
     "body-parser": "^1.15.1",
+    "cheerio": "^1.0.0-rc.2",
     "express": "^4.13.4",
+    "fetch": "^1.1.0",
     "firebase": "^5.1.0",
     "localtunnel": "^1.9.0",
     "package.json": "^2.0.1",
