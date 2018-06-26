@@ -1,12 +1,12 @@
 const apiai = require('apiai');
 const config = require('../config/config');
 const message = require('./message');
-
+const cheerio = require('cheerio');
 const apiEvents = require('./api/apiEvents');
 const apiDeadline = require('./api/apiDeadline');
 const getInfo = require('./getInfo');
 const db = require('./firebase/firebase');
-console.log(db.db);
+
 const apiAi = apiai(config.API_AI_CLIENT_ACCESS_TOKEN);
 
 let homeworkDesc = {courseName: '', deadline:{date:'',time:'',datePeriod:''}};
@@ -84,6 +84,22 @@ module.exports.sendToApiAi = (text, id) => {
           message.callSendAPI(id, response);
           break;
 
+          case 'get-professor-by-division':
+          let parameterss = response.result.parameters.division
+          response = await getInfo.getProfessorName(parameterss);
+          let items = [];
+          var $ = cheerio.load(response);
+          var allProfessorsFirst = $(".notranslate");
+          allProfessorsFirst.each(function(index){
+              items.push({text: $('.notranslate').children('.given-name').eq(index).text()+" "+$(".notranslate").children(".family-name").eq(index).text()});
+            });
+          items.forEach((item)=> {
+            message.callSendAPI(id, item);
+          })
+          // message.callSendAPI(id,response);
+          break;
+
+          //response to the is there homework broadcast
       case 'get-homework-action':
 
           response = {
