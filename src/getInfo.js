@@ -25,3 +25,16 @@ module.exports.getLibraryHours = () => {
     });
   });
 }
+
+module.exports.getProfessorName = (division) => {
+  let url = `https://www.caldwell.edu/directory/faculty`+`?cn-s=`+division;
+  return new Promise(function(resolve, reject){
+    request({
+      url : url,
+      json: true
+    }, (err, response, html) => {
+        resolve(html);
+      });
+
+    });
+  }
