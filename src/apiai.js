@@ -9,6 +9,10 @@ const db = require('./firebase/firebase');
 
 const apiAi = apiai(config.API_AI_CLIENT_ACCESS_TOKEN);
 
+// for testing homework-notification purpose only.
+// const homework = require('./homework/homework_utils');
+// console.log(homework.homework(config.ADMIN_ID))
+
 let homeworkDesc = {courseName: '', deadline:{date:'',time:'',datePeriod:''}};
 
 module.exports.sendToApiAi = (text, id) => {
@@ -21,7 +25,7 @@ module.exports.sendToApiAi = (text, id) => {
     //compare which intent to call depends on the action name
     const action = response.result.action;
     const parameter = response.result.parameters;
-    console.log(action);
+
     switch(action){
       // case get-week -events.
       case "get-week-events":
