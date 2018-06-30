@@ -12,8 +12,18 @@ const homework = require('./src/homework/homework_utils');
 let current_day = homework.get_current_date()
 let current_time = homework.get_current_time()
 
-let list_of_endtimes = homework.get_end_time_of_courses(current_day)
-console.log(list_of_endtimes);
+// let list_of_endtimes = homework.get_end_time_of_courses(current_day) // return promise. Needs close look.
+
+let dummy_list_of_endtimes = ['09:45', '11:45']
+let dummy_current_time = '09:45'
+
+
+for(var el of dummy_list_of_endtimes){
+  if(dummy_current_time == el){
+    homework.broadcast_asking_for_homework("friday", el);
+  }
+}
+
 
 app.set('port', (process.env.PORT || 5000))
 

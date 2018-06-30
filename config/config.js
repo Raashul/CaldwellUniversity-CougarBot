@@ -5,7 +5,7 @@ module.exports = {
     FB_APP_SECRET: '7902c414e183c54786fbeb61523d1a5c',
     ADMIN_ID: '1905377426202174',
     // SERVER_URL: "https://cougarapp.herokuapp.com/",
-    SERVER_URL: "https://smart-dog-60.localtunnel.me/",
+    SERVER_URL: "https://honest-monkey-25.localtunnel.me/",
 
 
     //  firbase config

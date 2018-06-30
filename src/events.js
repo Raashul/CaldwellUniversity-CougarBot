@@ -12,7 +12,7 @@ module.exports.handleMessage = async (sender_psid, received_message, id) => {
     let text = received_message.text;
     if(sender_psid == config.ADMIN_ID && text.startsWith("@urgent")){
       var urgent_message = text.substr(text.indexOf(' ')+1);
-      broadcast.broadCastFunc(urgent_message);
+      broadcast.broadCastToAllUsers(urgent_message);
     }else if(received_message.quick_reply){
       if(received_message.quick_reply.payload === '<homework>'){
         if(received_message.text === 'Yes'){
