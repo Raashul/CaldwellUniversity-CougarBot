@@ -18,7 +18,7 @@ createBroadCastMessageForAll = (urgent_message) => {
       "uri": "https://graph.facebook.com/v2.11/me/message_creatives?access_token=",
       "qs":{ "access_token": config.FB_PAGE_TOKEN },
       "method": "POST",
-      "json": request_body
+      "json": urgent_message_body
     }, (err, res, body) => {
       if (!err) {
         console.log("boradcast message created.")
@@ -129,7 +129,7 @@ broadCastToSelected = (broadCastId, custom_label) => {
       "json": request_body
     }, (err, res, body) => {
       if (!err) {
-        console.log("boradcast message sent to selected students.")
+        console.log("broadcast message sent to selected students.")
       } else {
         console.error("Unable to send boradcast POST request due to: " + err);
       }
@@ -164,11 +164,12 @@ module.exports.broadCastToAllUsers = async (message) => {
   broadCastToAll(broadCastId.message_creative_id);  // broadcast to all users.
 }
 
-module.exports.broadCastToStudentWithSameLabel = async (psid, time) => {
+module.exports.broadCastToStudentWithSameLabel = async (list_of_id, time) => {
   var broadCastId = await createBroadCastMessageForSelected() // create a broadcast message.
   var custom_label_id =  await createLabelForSelected(time) // create custom label for all students having class at the samae time.
-  for(each_user of psid){
-    await associateLabelForSelected(psid) // associate label with PSID's
+  console.log(custom_label_id);
+  for(each_el of list_of_id){
+    await associateLabelForSelected(each_el.user) // associate label with PSID's
   }
-  broadCastToSelected(broadCastId, custom_label_id) // broadcast to the selected users.
+  broadCastToSelected(broadCastId.message_creative_id, custom_label_id) // broadcast to the selected users.
 }

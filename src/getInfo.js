@@ -14,8 +14,8 @@ module.exports.getProfileDetails = (sender_psid) => {
   });
 }
 
-module.exports.getProfileID = (sender_psid) => {
-  let url = `https://graph.facebook.com/v3.0/${sender_psid}?fields=name,age_range,ids_for_apps,ids_for_pages&access_token=${config.FB_PAGE_TOKEN}`
+module.exports.getUserPSID = (sender_asid) => {
+  let url = `https://graph.facebook.com/v3.0/${sender_asid}/ids_for_pages?&access_token=${config.APP_ACCESS_TOCKEN_COUGARBOT_TEST1}`
   return new Promise(function(resolve, reject){
     request({
       url : url,

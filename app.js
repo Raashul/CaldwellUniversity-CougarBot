@@ -9,21 +9,23 @@ var app = express()
 
 // this is a test for homework feature
 const homework = require('./src/homework/homework_utils');
-let current_day = homework.get_current_date()
-let current_time = homework.get_current_time()
-
-// let list_of_endtimes = homework.get_end_time_of_courses(current_day) // return promise. Needs close look.
-
-let dummy_list_of_endtimes = ['09:45', '11:45']
-let dummy_current_time = '09:45'
 
 
-for(var el of dummy_list_of_endtimes){
-  if(dummy_current_time == el){
-    homework.broadcast_asking_for_homework("friday", el);
+homework_init = async() => {
+  let current_day = "tuesday" // await homework.get_current_date()
+  let current_time = "09:45" // await homework.get_current_time()
+
+  let list_of_endtimes = await homework.get_end_time_of_courses(current_day) // list of all endtimes
+
+
+  for(var an_end_time of list_of_endtimes){
+    if(current_time == an_end_time){
+      homework.broadcast_asking_for_homework(current_day, an_end_time);
+    }
   }
 }
 
+homework_init()
 
 app.set('port', (process.env.PORT || 5000))
 
