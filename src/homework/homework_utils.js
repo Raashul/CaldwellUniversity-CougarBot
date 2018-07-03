@@ -82,3 +82,8 @@ module.exports.get_current_time = () => {
   let current_time = d.getHours() + ":" +  d.getMinutes();
   return current_time
 }
+
+module.exports.manipulate_date = (date) => {
+  let new_date = date.match(/\d+/g)[0] + date.match(/\d+/g)[1]
+  return new_date;
+}

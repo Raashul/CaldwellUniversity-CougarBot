@@ -12,7 +12,7 @@ const homework = require('./src/homework/homework_utils');
 
 
 homework_init = async() => {
-  let current_day = "tuesday" // await homework.get_current_date()
+  let current_day = "tuesday" //await homework.get_current_date()
   let current_time = "09:45" // await homework.get_current_time()
 
   let list_of_endtimes = await homework.get_end_time_of_courses(current_day) // list of all endtimes

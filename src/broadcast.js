@@ -1,5 +1,6 @@
 const request = require('request');
 const config = require('../config/config');
+const homework = require('./homework/homework_utils');
 
 // for broadcasting messages to all users.
 createBroadCastMessageForAll = (urgent_message) => {
@@ -72,7 +73,7 @@ createBroadCastMessageForSelected = () => {
 // create label for targeted students.
 createLabelForSelected = (time) => {
   let request_body = {
-    "name": `class_at_${time}`
+    "name": "admin"
   }
   // Send the HTTP request to the Messenger Platform
   return new Promise(function(resolve, reject){
@@ -100,7 +101,7 @@ associateLabelForSelected = (PSID, custom_label) => {
   // Send the HTTP request to the Messenger Platform
   return new Promise(function(resolve, reject){
     request({
-      "uri": `https://graph.facebook.com/v2.11/me/${custom_label}/label/access_token=`,
+      "uri": `https://graph.facebook.com/v2.11/${custom_label}/label?access_token=`,
       "qs":{ "access_token": config.FB_PAGE_TOKEN },
       "method": "POST",
       "json": request_body
@@ -122,6 +123,7 @@ broadCastToSelected = (broadCastId, custom_label) => {
     "custom_label_id": custom_label
   }
   // Send the HTTP request to the Messenger Platform
+  return new Promise(function(resolve, reject){
     request({
       "uri": "https://graph.facebook.com/v2.11/me/broadcast_messages?access_token=",
       "qs": { "access_token": config.FB_PAGE_TOKEN },
@@ -130,10 +132,12 @@ broadCastToSelected = (broadCastId, custom_label) => {
     }, (err, res, body) => {
       if (!err) {
         console.log("broadcast message sent to selected students.")
+        resolve(body)
       } else {
         console.error("Unable to send boradcast POST request due to: " + err);
       }
   })
+})
 }
 
 // send broadcast message to all users.
@@ -144,6 +148,7 @@ broadCastToAll = (broadCastId) => {
     "tag": "COMMUNITY_ALERT" // for more info visit: https://developers.facebook.com/docs/messenger-platform/send-messages/message-tags
   }
   // Send the HTTP request to the Messenger Platform
+  return new Promise(function(resolve, reject){
     request({
       "uri": "https://graph.facebook.com/v2.11/me/broadcast_messages?access_token=",
       "qs": { "access_token": config.FB_PAGE_TOKEN },
@@ -156,7 +161,32 @@ broadCastToAll = (broadCastId) => {
         console.error("Unable to send boradcast POST request due to: " + err);
       }
   })
+})
 }
+
+// after broadcasting disassociate the labels from the user.
+disassociate_label_from_user = (custom_label, psid) => {
+  let request_body = {
+    "user": psid
+  }
+  // Send the HTTP request to the Messenger Platform
+  return new Promise(function(resolve, reject){
+    request({
+      "uri": `https://graph.facebook.com/v2.11/${custom_label}/label?access_token=`,
+      "qs":{ "access_token": config.FB_PAGE_TOKEN },
+      "method": "DELETE",
+      "json": request_body
+    }, (err, res, body) => {
+      if (!err) {
+        console.log("Label disassociated label with the PSID")
+        resolve(body);
+      } else {
+        console.error("Unable to send DELETE request due to: " + err);
+      }
+    });
+  })
+}
+
 
 // To broadcast important messages.
 module.exports.broadCastToAllUsers = async (message) => {
@@ -166,10 +196,19 @@ module.exports.broadCastToAllUsers = async (message) => {
 
 module.exports.broadCastToStudentWithSameLabel = async (list_of_id, time) => {
   var broadCastId = await createBroadCastMessageForSelected() // create a broadcast message.
-  var custom_label_id =  await createLabelForSelected(time) // create custom label for all students having class at the samae time.
-  console.log(custom_label_id);
+  // var new_time = await homework.manipulate_date(time)
+
+  // var custom_label_id =  await createLabelForSelected(new_time) // create custom label for all students having class at the samae time.
+  var custom_label_id = "1742177095871731"
+
   for(each_el of list_of_id){
-    await associateLabelForSelected(each_el.user) // associate label with PSID's
+    let res = await associateLabelForSelected(each_el.user, custom_label_id) // associate label with PSID's
   }
-  broadCastToSelected(broadCastId.message_creative_id, custom_label_id) // broadcast to the selected users.
+
+  let broadcast_obj = await broadCastToSelected(broadCastId.message_creative_id, custom_label_id) // broadcast to the selected users.
+
+  for(each_el of list_of_id){
+    let res_obj = await disassociate_label_from_user(custom_label_id, each_el.user) // associate label with PSID's
+  }
+
 }
