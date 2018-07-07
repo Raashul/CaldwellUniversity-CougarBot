@@ -149,7 +149,6 @@ module.exports.sendToApiAi = (text, id, courseName) => {
     //send to facebook messenger
     message.callSendAPI(id, response);
 
-
     }//end of switch
   });
 
