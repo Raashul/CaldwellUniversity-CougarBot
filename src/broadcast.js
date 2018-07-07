@@ -22,7 +22,7 @@ createBroadCastMessageForAll = (urgent_message) => {
       "json": urgent_message_body
     }, (err, res, body) => {
       if (!err) {
-        console.log("boradcast message created.")
+        console.log("broadcast message created.")
         resolve(body);
       } else {
         console.error("Unable to create boradcast POST request due to: " + err);

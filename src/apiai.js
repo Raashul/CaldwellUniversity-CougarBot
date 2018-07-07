@@ -5,7 +5,8 @@ const cheerio = require('cheerio');
 const apiEvents = require('./api/apiEvents');
 const apiDeadline = require('./api/apiDeadline');
 const getInfo = require('./getInfo');
-const db = require('./firebase/firebase');
+const firebase = require('./firebase/firebase');
+const homework = require('./homework/homework_utils');
 
 const apiAi = apiai(config.API_AI_CLIENT_ACCESS_TOKEN);
 
@@ -13,9 +14,9 @@ const apiAi = apiai(config.API_AI_CLIENT_ACCESS_TOKEN);
 // const homework = require('./homework/homework_utils');
 // console.log(homework.homework(config.ADMIN_ID))
 
-let homeworkDesc = {courseName: '', deadline:{date:'',time:'',datePeriod:''}};
+let homeworkDesc = {homwework: '', deadline:{date:'',time:'',datePeriod:''}, course: ''};
 
-module.exports.sendToApiAi = (text, id) => {
+module.exports.sendToApiAi = (text, id, courseName) => {
   var request =  apiAi.textRequest(text, {
       sessionId: id
   });
@@ -25,6 +26,10 @@ module.exports.sendToApiAi = (text, id) => {
     //compare which intent to call depends on the action name
     const action = response.result.action;
     const parameter = response.result.parameters;
+
+    if(courseName != undefined){
+      homeworkDesc.course = courseName
+    }
 
     switch(action){
       // case get-week -events.
@@ -86,7 +91,7 @@ module.exports.sendToApiAi = (text, id) => {
           message.callSendAPI(id, response);
           break;
 
-          case 'get-professor-by-division':
+      case 'get-professor-by-division':
           let parameterss = response.result.parameters.division
           response = await getInfo.getProfessorName(parameterss);
           let items = [];
@@ -103,34 +108,34 @@ module.exports.sendToApiAi = (text, id) => {
 
           //response to the is there homework broadcast
       case 'get-homework-action':
-
           response = {
             "text": response.result.fulfillment.speech
           };
           message.callSendAPI(id, response);
           break;
 
-      case 'get-homework-intent.get-homework-intent-custom':
-         homeworkDesc.courseName = response.result.parameters['homework-courses'];
-
+      case 'get-homework-intent.get-homework-intent-fallback':
+         homeworkDesc.homework = response.result.resolvedQuery;
           response = {
             "text": response.result.fulfillment.speech
           };
           message.callSendAPI(id, response);
           break;
 
-      case 'get-homework-deadline-actions':
+      case 'get-homework-intent.get-homework-intent-fallback.ask-for-homework-custom':
         homeworkDesc.deadline = response.result.parameters;
-
-
          response = {
            "text": response.result.fulfillment.speech
          };
          message.callSendAPI(id, response);
 
-         db.db.ref('users/'+id).set({
-           course: homeworkDesc.courseName,
-           deadline: homeworkDesc.deadline
+         // change psid to asid to match our database
+         let asid = await getInfo.getUserASID(id)
+         let current_day = await homework.get_current_date()
+
+         firebase.db.ref('user_courses/'+ asid + "/" + current_day + '/' + homeworkDesc.course).update({
+           deadline:  homeworkDesc.deadline,
+           homework: homeworkDesc.homework
          });
          break;
 

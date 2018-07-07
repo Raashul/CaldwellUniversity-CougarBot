@@ -24,7 +24,19 @@ module.exports.getUserPSID = (sender_asid) => {
       resolve(body)
     });
   });
+}
 
+module.exports.getUserASID = (sender_psid) => {
+  let url = `https://graph.facebook.com/v3.0/${sender_psid}?fields=name,age_range,ids_for_apps,ids_for_pages&access_token=${config.FB_PAGE_TOKEN}`
+  return new Promise(function(resolve, reject){
+    request({
+      url : url,
+      json: true
+    }, (error, response, body) => {
+      let psid = body.ids_for_apps.data[0].id;
+      resolve(psid)
+    });
+  });
 }
 
 module.exports.getLibraryHours = () => {

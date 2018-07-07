@@ -3,16 +3,16 @@ const firebase = require('../firebase/firebase');
 const broadcast = require('../broadcast');
 
 // get the ASID and course_name from course_endtime ---- returns a list of ASID and associated course_name
-module.exports.broadcast_asking_for_homework = async (day, end_time) => {
-  // get the list of all users with courses at the same time.
-  let list_of_all_ASID = await getListOfASID(day, end_time)       // eg. [ { user: '1583599285090865', course: 'AI' } ]
-  let list_off_all_PSID = await getListOfPSID(list_of_all_ASID)         // eg. [{1905377426202174: "AI"}]
-
-  broadcast.broadCastToStudentWithSameLabel(list_off_all_PSID, end_time)    // broadcast to the users
-}
+// module.exports.broadcast_asking_for_homework = async (day, end_time) => {
+//   // get the list of all users with courses at the same time.
+//   let list_of_all_ASID = await getListOfASID(day, end_time)       // eg. [ { user: '1583599285090865', course: 'AI' } ]
+//   let list_off_all_PSID = await getListOfPSID(list_of_all_ASID)         // eg. [{user: '1905377426202174', course: "AI"}]
+//
+//   broadcast.broadCastToStudentWithSameLabel(list_off_all_PSID, end_time)    // broadcast to the users
+// }
 
 // returns list of ID and course_name associated with the end_time
-getListOfASID = (day, end_time) => {
+module.exports.getListOfASID = (day, end_time) => {
   return firebase.db.ref('/user_courses').once('value').then(function(snapshot) {
     let course_obj = snapshot.val();
     let list_of_asid = []
@@ -29,7 +29,7 @@ getListOfASID = (day, end_time) => {
 }
 
 // get a list of all associated PSIDs
-getListOfPSID = async (list_of_asid) => {
+module.exports.getListOfPSID = async (list_of_asid) => {
   var list_of_psid = []
   for(var each_el of list_of_asid){
     let user_asid = each_el.user
@@ -46,6 +46,7 @@ associate_asid_with_psid = async (user_asid) => {
   return user_psid
 }
 
+
 // get end-time of all the courses of current day
 module.exports.get_end_time_of_courses = async (day) => {
  return firebase.db.ref('/user_courses').once('value').then(function(snapshot) {
@@ -53,7 +54,7 @@ module.exports.get_end_time_of_courses = async (day) => {
    let list_of_endtimes = []
    for(var every_user in course_obj){
      let todays_course_list = course_obj[every_user][day]
-     for(var each_course in todays_course_list){
+     for(var each_course in todays_course_list){    // NEED TO REMOVE DUPLICATE TIME.
        list_of_endtimes.push(todays_course_list[each_course].end_time)
      }
    }

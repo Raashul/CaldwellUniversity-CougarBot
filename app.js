@@ -9,18 +9,26 @@ var app = express()
 
 // this is a test for homework feature
 const homework = require('./src/homework/homework_utils');
-
+const message = require('./src/message');
 
 homework_init = async() => {
   let current_day = "tuesday" //await homework.get_current_date()
   let current_time = "09:45" // await homework.get_current_time()
 
+  // update the list if current_time = 12:01 AM everyday.
   let list_of_endtimes = await homework.get_end_time_of_courses(current_day) // list of all endtimes
-
 
   for(var an_end_time of list_of_endtimes){
     if(current_time == an_end_time){
-      homework.broadcast_asking_for_homework(current_day, an_end_time);
+      var list_of_all_ASID = await homework.getListOfASID(current_day, an_end_time) // get list of all users and relative courses at the current time.
+      let list_off_all_PSID = await homework.getListOfPSID(list_of_all_ASID) // change asid to PSID
+
+      //send the notification to each user
+      for(var each_user of list_off_all_PSID){
+        message.sendQuickReply(each_user.user, each_user.course)
+      }
+
+      // homework.broadcast_asking_for_homework(current_day, an_end_time);
     }
   }
 }
