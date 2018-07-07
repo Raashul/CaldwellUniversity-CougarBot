@@ -119,6 +119,7 @@ module.exports.sendToApiAi = (text, id, courseName) => {
           response = {
             "text": response.result.fulfillment.speech
           };
+          console.log("Homework detail recieved.");
           message.callSendAPI(id, response);
           break;
 
@@ -127,6 +128,7 @@ module.exports.sendToApiAi = (text, id, courseName) => {
          response = {
            "text": response.result.fulfillment.speech
          };
+         console.log("Homework deadline recieved.");
          message.callSendAPI(id, response);
 
          // change psid to asid to match our database
@@ -137,6 +139,7 @@ module.exports.sendToApiAi = (text, id, courseName) => {
            deadline:  homeworkDesc.deadline,
            homework: homeworkDesc.homework
          });
+         console.log("Database updated");
          break;
 
       default:

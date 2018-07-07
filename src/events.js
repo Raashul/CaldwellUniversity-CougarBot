@@ -16,12 +16,13 @@ module.exports.handleMessage = async (sender_psid, received_message, id) => {
     }
     else if(received_message.quick_reply){
         if(received_message.text === 'Yes'){
+          console.log("Homework reply: Yes.");
           let courseName = received_message.quick_reply.payload; //get the course name
           // homework.storeHomework(sender_psid, courseName)
-          console.log(courseName);
           apiAi.sendToApiAi('grihakarya',id, courseName);
         }
         else if(received_message.text === 'No'){
+          console.log("Homework reply: No");
           response = {
             "text": "That's awesome! Enjoy your time without assignments."
           }

@@ -12,11 +12,14 @@ const homework = require('./src/homework/homework_utils');
 const message = require('./src/message');
 
 homework_init = async() => {
-  let current_day = "tuesday" //await homework.get_current_date()
-  let current_time = "09:45" // await homework.get_current_time()
+  let current_day = await homework.get_current_date()
+  let current_time = await homework.get_current_time()
 
   // update the list if current_time = 12:01 AM everyday.
-  let list_of_endtimes = await homework.get_end_time_of_courses(current_day) // list of all endtimes
+  let list_of_endtimes = []
+  if (current_time == '00:01'){
+    list_of_endtimes = await homework.get_end_time_of_courses(current_day) // list of all endtimes
+  }
 
   for(var an_end_time of list_of_endtimes){
     if(current_time == an_end_time){
@@ -25,6 +28,7 @@ homework_init = async() => {
 
       //send the notification to each user
       for(var each_user of list_off_all_PSID){
+        console.log("Notification asking for homework sent.");
         message.sendQuickReply(each_user.user, each_user.course)
       }
 

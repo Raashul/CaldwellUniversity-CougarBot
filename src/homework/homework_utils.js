@@ -58,6 +58,7 @@ module.exports.get_end_time_of_courses = async (day) => {
        list_of_endtimes.push(todays_course_list[each_course].end_time)
      }
    }
+   console.log("List of End_time updated.");
    return list_of_endtimes;
 })
 }
