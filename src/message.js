@@ -32,3 +32,44 @@ module.exports.callSendAPI = (sender_psid, response) => {
     body: JSON.stringify(request_body)
   });
 }
+
+module.exports.sendQuickReply = (sender_psid, course) => {
+  // Construct the message body
+  let request_body = {
+    "recipient":{
+    "id":sender_psid
+  },
+  "message":{
+    "text": `Do you have a homework for ${course}?`,
+    "quick_replies":[
+      {
+   "content_type":"text",
+   "title":"Yes",
+   "payload": `${course}`,
+   "image_url":"https://cdn.shopify.com/s/files/1/1061/1924/products/Thumbs_Down_Sign_Emoji_Icon_ios10_large.png?v=1513336434"
+ },
+ {
+   "content_type":"text",
+   "title":"No",
+   "payload":`${course}`,
+   "image_url":"https://emojipedia-us.s3.amazonaws.com/thumbs/120/emoji-one/104/thumbs-up-sign_1f44d.png"
+ }
+    ]
+  }
+  }
+  // Send the HTTP request to the Messenger Platform
+  return new Promise(function(resolve, reject){
+    request({
+      "uri": "https://graph.facebook.com/v2.11/me/messages?access_token=",
+      "qs": { "access_token": config.FB_PAGE_TOKEN },
+      "method": "POST",
+      "json": request_body
+    }, (err, res, body) => {
+      if (!err) {
+        console.log("quick reply message sent.")
+      } else {
+        console.error("Unable to send boradcast POST request due to: " + err);
+      }
+  })
+})
+}

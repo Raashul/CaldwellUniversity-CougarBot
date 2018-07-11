@@ -4,7 +4,6 @@ const config = require('../config/config');
 const events = require('./events');
 
 
-
 module.exports.getWebhook = (req, res) => {
   if (req.query['hub.verify_token'] === config.FB_VERIFY_TOKEN) {
     res.send(req.query['hub.challenge'])

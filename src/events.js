@@ -12,24 +12,30 @@ module.exports.handleMessage = async (sender_psid, received_message, id) => {
     let text = received_message.text;
     if(sender_psid == config.ADMIN_ID && text.startsWith("@urgent")){
       var urgent_message = text.substr(text.indexOf(' ')+1);
-      broadcast.broadCastFunc(urgent_message);
-    }else if(received_message.quick_reply){
-      if(received_message.quick_reply.payload === '<homework>'){
+      broadcast.broadCastToAllUsers(urgent_message);
+    }
+    else if(received_message.quick_reply){
         if(received_message.text === 'Yes'){
-          apiAi.sendToApiAi('grihakarya',id);
+          console.log("Homework reply: Yes.");
+          let courseName = received_message.quick_reply.payload; //get the course name
+          // homework.storeHomework(sender_psid, courseName)
+          apiAi.sendToApiAi('grihakarya',id, courseName);
         }
         else if(received_message.text === 'No'){
-          apiAi.sendToApiAi('grihakarya',id);
+          console.log("Homework reply: No");
+          response = {
+            "text": "That's awesome! Enjoy your time without assignments."
+          }
+          message.callSendAPI(sender_psid, response)
         }
-      }
     }
     else {
       apiAi.sendToApiAi(text, id);
       // Create the payload for a basic text message, which
       // will be added to the body of our request to the Send API
     }
-
   }
+
   else if (received_message.attachments) {
     // Get the URL of the message attachment
     let attachment_url = received_message.attachments[0].payload.url;
