@@ -81,7 +81,11 @@ module.exports.get_current_date = () => {
 
 module.exports.get_current_time = () => {
   var d = new Date(); // for now
-  let current_time = d.getHours() + ":" +  d.getMinutes();
+  var mins = d.getMinutes();
+  if(mins < 10){
+    mins = '0'+ mins;
+  }
+  let current_time = d.getHours() + ":" +  mins;
   return current_time
 }
 
