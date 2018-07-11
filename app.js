@@ -20,7 +20,7 @@ homework_init = async() => {
   console.log("Homework function entered every one minute.");
 
   // update the list if current_time = 12:01 AM everyday.
-  if (current_time == '23:05' && json_file.updated != current_day){
+  if (current_time == '00:01' && json_file.updated != current_day){
       var list = {}
       var list_of_endtimes = await homework.get_end_time_of_courses(current_day) // list of all endtimes
 
