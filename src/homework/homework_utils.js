@@ -63,6 +63,15 @@ module.exports.get_end_time_of_courses = async (day) => {
 })
 }
 
+module.exports.get_end_time_of_current_day = async (day) => {
+ return firebase.db.ref('/update_times').once('value').then(function(snapshot) {
+   return snapshot.val();
+})
+}
+
+
+
+
 module.exports.get_current_date = () => {
   var date = new Date()
   var day = date.getDay()
