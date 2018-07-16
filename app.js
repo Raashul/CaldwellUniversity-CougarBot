@@ -80,3 +80,14 @@ app.post('/webhook/', index.postWebhook);
 app.listen(app.get('port'), function() {
     console.log('running on port', app.get('port'))
 })
+
+// ping the site every five minutes.
+ping () => {
+  request('http://www.google.com', function (error, response, body) {
+  if(!error){
+    console.log(body);
+  }
+});
+}
+
+setInterval(ping, 300000)
