@@ -83,9 +83,9 @@ app.listen(app.get('port'), function() {
 
 // ping the site every five minutes.
 ping = () => {
-  request('http://www.google.com', function (error, response, body) {
+  request('https://cougarbot-test.herokuapp.com/', function (error, response, body) {
   if(!error){
-    console.log(body);
+    console.log("pinged the site!");
   }
 });
 }
