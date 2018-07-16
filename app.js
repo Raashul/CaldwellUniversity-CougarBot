@@ -21,7 +21,7 @@ homework_init = async() => {
   console.log(`Homework_util updated at ${current_time} on ${current_day}`);
 
   // update the list if current_time = 00:01 AM everyday.
-  if (current_time == '20:55'){
+  if (current_time == '00:01'){
       var list = {end_times:{}, updated:""}
       var list_of_endtimes = await homework.get_end_time_of_courses(current_day) // list of all endtimes
 
