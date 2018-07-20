@@ -45,21 +45,21 @@ get_current_time = () => {
   return current_time
 }
 
-let current_time = get_current_time()
-let current_date = get_current_date()
-let current_day = get_current_day()
-
-console.log(`Homework_util function entered at ${current_time} on ${current_day}`);
-
 associate_asid_with_psid = async (user_asid) => {
   let res = await getInfo.getUserPSID(user_asid)
   let user_psid = res.data[0].id;
   return user_psid
 }
 
-module.exports.core_homework = async () => {
-  await firebase.db.ref('/user_courses').once('value').then(async function(snapshot) {
-    let course_obj = snapshot.val();
+module.exports.core_homework = () => {
+  firebase.db.ref('/user_courses').once('value').then(async function(snapshot) {
+
+    let current_time = get_current_time()
+    let current_date = get_current_date()
+    let current_day = get_current_day()
+    console.log(`Homework_util function entered at ${current_time} on ${current_day}`);
+
+    let course_obj = await snapshot.val();
     // send notification asking for homework.
     for(var each_user in course_obj){
       if(course_obj[each_user][current_day]){
@@ -107,5 +107,5 @@ module.exports.core_homework = async () => {
 }
 
 module.exports.homework_features = {
-  day : current_day
+  day : get_current_day,
 }
