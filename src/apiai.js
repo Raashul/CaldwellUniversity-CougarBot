@@ -133,7 +133,7 @@ module.exports.sendToApiAi = (text, id, courseName) => {
 
          // change psid to asid to match our database
          let asid = await getInfo.getUserASID(id)
-         let current_day = await homework.get_current_date()
+         let current_day = homework.homework_features.day
 
          firebase.db.ref('user_courses/'+ asid + "/" + current_day + '/' + homeworkDesc.course).update({
            deadline:  homeworkDesc.deadline,
