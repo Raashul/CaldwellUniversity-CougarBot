@@ -1,4 +1,3 @@
-const getInfo = require('../getInfo');
 const firebase = require('../firebase/firebase');
 const broadcast = require('../broadcast');
 const message = require('../message');
@@ -45,12 +44,6 @@ get_current_time = () => {
   return current_time
 }
 
-associate_asid_with_psid = async (user_asid) => {
-  let res = await getInfo.getUserPSID(user_asid)
-  let user_psid = res.data[0].id;
-  return user_psid
-}
-
 module.exports.core_homework = () => {
   firebase.db.ref('/user_courses').once('value').then(async function(snapshot) {
 
@@ -66,8 +59,7 @@ module.exports.core_homework = () => {
         let todays_course_list = course_obj[each_user][current_day]
         for(var each_course in todays_course_list){    // NEED TO REMOVE DUPLICATE TIME.
           if(current_time == todays_course_list[each_course].end_time){
-            let user = await associate_asid_with_psid(each_user)
-            message.sendQuickReply(user, each_course)
+            message.sendQuickReply(each_user, each_course)
             console.log(`Notification asking for homework sent to ${each_user}`);
           }
         }
@@ -83,18 +75,17 @@ module.exports.core_homework = () => {
           let deadline_obj = course_obj[each_user][each_day][each_course].deadline;
           if(deadline_obj){
             if(current_date == deadline_obj.date){
-              let user = await associate_asid_with_psid(each_user)
               if(deadline_obj.time != "00:00:00"){
                 response = {
                   "text" : `Homework for ${each_course} is ${homework}. It is due today  in ${deadline_obj.time}.`
                 }
-                message.callSendAPI(user, response)
+                message.callSendAPI(each_user, response)
                 console.log(`Notification reminding of homework sent to ${each_user}`);
               }else{
                   response = {
                     "text" : `Homework for ${each_course} is ${homework}. It is due today.`
                   }
-                  message.callSendAPI(user, response)
+                  message.callSendAPI(each_user, response)
                   console.log(`Notification reminding of homework sent to ${each_user}`);
                 }
               }
