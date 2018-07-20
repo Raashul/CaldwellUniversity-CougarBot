@@ -5,8 +5,8 @@ module.exports = {
   FB_APP_SECRET: '7902c414e183c54786fbeb61523d1a5c',
   ADMIN_ID: '1905377426202174',
   // SERVER_URL: "https://cougarapp.herokuapp.com/",
-  SERVER_URL: "https://cougarbot-test.herokuapp.com/",
-  //SERVER_URL: "https://fresh-dragon-28.localtunnel.me/",
+  //SERVER_URL: "https://cougarbot-test.herokuapp.com/",
+  SERVER_URL: "https://spicy-cat-22.localtunnel.me/",
   APP_ACCESS_TOCKEN_COUGARBOT_TEST1 : '970474006443293|FIEF2eRZDR8Pm1bU0IIdg4SUlZA',
   APP_ACCESS_TOCKEN_COUGARBOT : '149825638978803|4jhm7d4cHorhm3ZqiIcvWLbofak',
 
