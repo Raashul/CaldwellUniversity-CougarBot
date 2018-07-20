@@ -6,7 +6,7 @@ module.exports = {
   ADMIN_ID: '1905377426202174',
   // SERVER_URL: "https://cougarapp.herokuapp.com/",
   SERVER_URL: "https://cougarbot-test.herokuapp.com/",
-  //SERVER_URL: "https://nice-skunk-8.localtunnel.me/",
+  //SERVER_URL: "https://strong-otter-84.localtunnel.me/",
   APP_ACCESS_TOCKEN_COUGARBOT_TEST1 : '970474006443293|FIEF2eRZDR8Pm1bU0IIdg4SUlZA',
   APP_ACCESS_TOCKEN_COUGARBOT : '149825638978803|4jhm7d4cHorhm3ZqiIcvWLbofak',
 

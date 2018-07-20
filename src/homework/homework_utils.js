@@ -62,12 +62,14 @@ module.exports.core_homework = async () => {
     let course_obj = snapshot.val();
     // send notification asking for homework.
     for(var each_user in course_obj){
-      let todays_course_list = course_obj[each_user][current_day]
-      for(var each_course in todays_course_list){    // NEED TO REMOVE DUPLICATE TIME.
-        if(current_time == todays_course_list[each_course].end_time){
-          let user = await associate_asid_with_psid(each_user)
-          message.sendQuickReply(user, each_course)
-          console.log(`Notification asking for homework sent to ${each_user}`);
+      if(course_obj[each_user][current_day]){
+        let todays_course_list = course_obj[each_user][current_day]
+        for(var each_course in todays_course_list){    // NEED TO REMOVE DUPLICATE TIME.
+          if(current_time == todays_course_list[each_course].end_time){
+            let user = await associate_asid_with_psid(each_user)
+            message.sendQuickReply(user, each_course)
+            console.log(`Notification asking for homework sent to ${each_user}`);
+          }
         }
       }
     }
