@@ -107,5 +107,5 @@ module.exports.core_homework = () => {
 }
 
 module.exports.homework_features = {
-  day : get_current_day,
+  day : get_current_day(),
 }
