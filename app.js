@@ -13,7 +13,11 @@ const firebase = require('./src/firebase/firebase');
 var app = express()
 
 // check for homework details every minute.
-setInterval(homework.core_homework, 60000)
+homework_init = () => {
+  homework.core_homework()
+}
+setInterval(homework_init, 60000)
+
 
 app.set('port', (process.env.PORT || 5000))
 
