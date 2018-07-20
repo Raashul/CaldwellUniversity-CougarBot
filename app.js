@@ -12,6 +12,9 @@ const firebase = require('./src/firebase/firebase');
 
 var app = express()
 
+// check for homework details every minute.
+setInterval(homework.core_homework, 60000)
+
 app.set('port', (process.env.PORT || 5000))
 
 // Process application/x-www-form-urlencoded
@@ -32,9 +35,6 @@ app.post('/webhook/', index.postWebhook)
 app.listen(app.get('port'), function() {
     console.log('running on port', app.get('port'))
 })
-
-// check for homework details every minute.
-setInterval(homework.core_homework, 60000)
 
 // ping the site every five minutes.
 ping = () => {
