@@ -43,7 +43,7 @@ module.exports.getStartedQuickReply = (sender_psid) => {
     "id":sender_psid
   },
   "message":{
-    "text": "Click on one of the button below to get started or simply type Hi to get started. ",
+    "text": "Click on one of the button below or simply type Hi to get started. ",
     "quick_replies":[
       {
    "content_type":"text",

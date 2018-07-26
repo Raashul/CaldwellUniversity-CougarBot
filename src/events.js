@@ -110,7 +110,7 @@ module.exports.handlePostback= async (sender_psid, received_postback) => {
 
       setTimeout(function(){
         message.getStartedQuickReply(sender_psid);
-      },1000);
+      },2000);
 
    }
 
