@@ -11,20 +11,64 @@ module.exports.callSendAPI = (sender_psid, response) => {
     "message": response
   }
 
-  // Send the HTTP request to the Messenger Platform
-  // request({
-  //   "uri": "https://graph.facebook.com/v2.6/me/messages",
-  //   "qs": { "access_token": config.FB_PAGE_TOKEN },
-  //   "method": "POST",
-  //   "json": request_body
-  // }, (err, res, body) => {
-  //   if (!err) {
-  //     console.log('message sent!')
-  //   } else {
-  //     console.error("Unable to send message:" + err);
-  //   }
-  // });
+  const qs = 'access_token=' + encodeURIComponent(config.FB_PAGE_TOKEN); // Here you'll need to add your PAGE TOKEN from Facebook
+  return fetch('https://graph.facebook.com/v2.6/me/messages?' + qs, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(request_body)
+  });
+}
 
+module.exports.callBubbleAPI = (sender_psid) => {
+  // Construct the message body
+  let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "sender_action" : "typing_on"
+  }
+
+  const qs = 'access_token=' + encodeURIComponent(config.FB_PAGE_TOKEN); // Here you'll need to add your PAGE TOKEN from Facebook
+  return fetch('https://graph.facebook.com/v2.6/me/messages?' + qs, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(request_body)
+  });
+}
+
+module.exports.getStartedQuickReply = (sender_psid) => {
+  // Construct the message body
+  let request_body = {
+    "recipient":{
+    "id":sender_psid
+  },
+  "message":{
+    "text": "Click on one of the button below to get started or simply type Hi to get started. ",
+    "quick_replies":[
+      {
+   "content_type":"text",
+   "title":"Library Hours",
+   "payload": "hours"
+ },
+ {
+   "content_type":"text",
+   "title":"Weekly Events",
+   "payload":"events"
+ },
+ {
+   "content_type":"text",
+   "title":"Majors",
+   "payload":"majors"
+ },
+ {
+   "content_type":"text",
+   "title":"Hi!!",
+   "payload":"hello"
+ }
+    ]
+  }
+  }
+  // Send the HTTP request to the Messenger Platform
   const qs = 'access_token=' + encodeURIComponent(config.FB_PAGE_TOKEN); // Here you'll need to add your PAGE TOKEN from Facebook
   return fetch('https://graph.facebook.com/v2.6/me/messages?' + qs, {
     method: 'POST',
