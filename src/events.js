@@ -10,6 +10,7 @@ module.exports.handleMessage = async (sender_psid, received_message, id) => {
   // Checks if the message contains text
   if (received_message.text) {
     let text = received_message.text;
+
     if(sender_psid == config.ADMIN_ID && text.startsWith("@urgent")){
       var urgent_message = text.substr(text.indexOf(' ')+1);
       broadcast.broadCastToAllUsers(urgent_message);
@@ -28,9 +29,25 @@ module.exports.handleMessage = async (sender_psid, received_message, id) => {
           }
           message.callSendAPI(sender_psid, response)
         }
+        else if(received_message.text === 'Library Hours'){
+          apiAi.sendToApiAi('get-library-hours',id);
+        }
+        else if(received_message.text === 'Weekly Events'){
+          apiAi.sendToApiAi('get-week-events',id);
+        }
+        else if(received_message.text === 'Majors'){
+          apiAi.sendToApiAi('get-majors',id);
+        }
+        else if(received_message.text === 'Hi!!'){
+          apiAi.sendToApiAi(text,id);
+        }
+
     }
     else {
-      apiAi.sendToApiAi(text, id);
+      message.callBubbleAPI(id);
+      setTimeout(function(){
+        apiAi.sendToApiAi(text, id);
+      },500);
       // Create the payload for a basic text message, which
       // will be added to the body of our request to the Send API
     }
@@ -80,19 +97,22 @@ module.exports.handlePostback= async (sender_psid, received_postback) => {
    //Set the response based on the postback payload
    if (payload === 'Get Started') {
 
-     response = {"text": `Hello ${user_info.first_name}.`};
-     response1 = {"text": "I am your Caldwell University smart assistant."};
-     response2 = {"text": "You can get college info, happening events, admission facts, and courses offered at Caldwell College."};
-     response3 = {"text": "Type hi to get started."};
+     response = {"text": `Hello ${user_info.first_name}, I am your Caldwell University smart assistant.`};
+     response1 = {"text": "You can get college info, happening events, admission facts, and courses offered at Caldwell College."};
+     response2 = {"text": "You can also easily set up your courses on http://cougarbot-site.herokuapp.com/ and get notified about your homeworks."};
 
 
       message.callSendAPI(sender_psid, response).then(() =>{
         return message.callSendAPI(sender_psid,response1).then(()=>{
-          return message.callSendAPI(sender_psid,response2).then(()=>{
-            return message.callSendAPI(sender_psid,response3);
-          });
+          return message.callSendAPI(sender_psid,response2)
         });
       });
 
+      setTimeout(function(){
+        message.getStartedQuickReply(sender_psid);
+      },1000);
+
    }
+
+
 }

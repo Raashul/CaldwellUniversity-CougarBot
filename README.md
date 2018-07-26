@@ -18,5 +18,4 @@
   <li> Rashul Rajbhandari </li>       
   <li>Bigyan Karki</li>              
   <li>Aamosh Dahal</li>
-  <li>Madhu Sujan Paudel</li>
 </ul>

@@ -43,7 +43,10 @@ module.exports.sendToApiAi = (text, id, courseName) => {
                 //"text": `You sent the message: "${received_message.text}". Now send me an attachment!`
                   "text": "Date: " + events[i].date.date + '\n' + "Description: " + events[i].summary
               }
-              message.callSendAPI(id, response);
+              message.callBubbleAPI(id);
+              setTimeout(function(){
+                message.callSendAPI(id,response);
+              },500);
             }
           }
         });
@@ -62,7 +65,10 @@ module.exports.sendToApiAi = (text, id, courseName) => {
             'text': response.result.fulfillment.speech
           }
         }
-        message.callSendAPI(id, response);
+        message.callBubbleAPI(id);
+        setTimeout(function(){
+          message.callSendAPI(id,response);
+        },500);
         break;
 
       //display library hours.
@@ -88,7 +94,11 @@ module.exports.sendToApiAi = (text, id, courseName) => {
               }
             }
           }
-          message.callSendAPI(id, response);
+
+          message.callBubbleAPI(id);
+          setTimeout(function(){
+            message.callSendAPI(id,response);
+          },500);
           break;
 
       case 'get-professor-by-division':
@@ -100,9 +110,16 @@ module.exports.sendToApiAi = (text, id, courseName) => {
           allProfessorsFirst.each(function(index){
               items.push({text: $('.notranslate').children('.given-name').eq(index).text()+" "+$(".notranslate").children(".family-name").eq(index).text()});
             });
-          items.forEach((item)=> {
-            message.callSendAPI(id, item);
-          })
+          let result = {text: ""};
+          items.forEach((item) => {
+            if(item.text!= " "){
+              result.text += item.text+",";
+            }
+          });
+          message.callBubbleAPI(id);
+          setTimeout(function(){
+            message.callSendAPI(id,result);
+          },500);
           // message.callSendAPI(id,response);
           break;
 
@@ -111,7 +128,10 @@ module.exports.sendToApiAi = (text, id, courseName) => {
           response = {
             "text": response.result.fulfillment.speech
           };
-          message.callSendAPI(id, response);
+          message.callBubbleAPI(id);
+          setTimeout(function(){
+            message.callSendAPI(id,response);
+          },500);
           break;
 
       case 'get-homework-intent.get-homework-intent-fallback':
@@ -120,7 +140,10 @@ module.exports.sendToApiAi = (text, id, courseName) => {
             "text": response.result.fulfillment.speech
           };
           console.log("Homework detail recieved.");
-          message.callSendAPI(id, response);
+          message.callBubbleAPI(id);
+          setTimeout(function(){
+            message.callSendAPI(id,response);
+          },500);
           break;
 
       case 'get-homework-intent.get-homework-intent-fallback.ask-for-homework-custom':
@@ -129,12 +152,16 @@ module.exports.sendToApiAi = (text, id, courseName) => {
            "text": response.result.fulfillment.speech
          };
          console.log("Homework deadline recieved.");
-         message.callSendAPI(id, response);
+         message.callBubbleAPI(id);
+         setTimeout(function(){
+           message.callSendAPI(id,response);
+         },500);
 
          // change psid to asid to match our database
-         let current_day = homework.homework_features.day
+         let asid = await getInfo.getUserASID(id)
+         let current_day = await homework.get_current_date()
 
-         firebase.db.ref('user_courses/'+ id + "/" + current_day + '/' + homeworkDesc.course).update({
+         firebase.db.ref('user_courses/'+ asid + "/" + current_day + '/' + homeworkDesc.course).update({
            deadline:  homeworkDesc.deadline,
            homework: homeworkDesc.homework
          });
@@ -146,7 +173,10 @@ module.exports.sendToApiAi = (text, id, courseName) => {
           "text": response.result.fulfillment.speech
         }
     //send to facebook messenger
-    message.callSendAPI(id, response);
+    message.callBubbleAPI(id);
+    setTimeout(function(){
+      message.callSendAPI(id,response);
+    },500);
 
     }//end of switch
   });
