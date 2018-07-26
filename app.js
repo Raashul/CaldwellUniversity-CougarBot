@@ -43,7 +43,7 @@ ping = () => {
 }
 
 // check for homework details every minute.
-setInterval(homework.core_homework, 60000);
+//setInterval(homework.core_homework, 60000);
 
 //ping the site every five minutes.
-setInterval(ping, 300000)
+//setInterval(ping, 300000)
