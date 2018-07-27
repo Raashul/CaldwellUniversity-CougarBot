@@ -1,6 +1,9 @@
 const request = require('request');
 const config = require('../config/config');
 const fetch = require('node-fetch');
+const getInfo = require('./getInfo');
+
+const INTENTS = require('./constants/index');
 
 module.exports.callSendAPI = (sender_psid, response) => {
   // Construct the message body
@@ -47,22 +50,22 @@ module.exports.getStartedQuickReply = (sender_psid) => {
     "quick_replies":[
       {
    "content_type":"text",
-   "title":"Library Hours",
+   "title": INTENTS.intents.library,
    "payload": "hours"
  },
  {
    "content_type":"text",
-   "title":"Weekly Events",
+   "title": INTENTS.intents.events,
    "payload":"events"
  },
  {
    "content_type":"text",
-   "title":"Majors",
+   "title":INTENTS.intents.majors,
    "payload":"majors"
  },
  {
    "content_type":"text",
-   "title":"Hi!!",
+   "title": INTENTS.intents.hi,
    "payload":"hello"
  }
     ]
@@ -77,14 +80,17 @@ module.exports.getStartedQuickReply = (sender_psid) => {
   });
 }
 
-module.exports.sendQuickReply = (sender_psid, course) => {
+module.exports.sendQuickReply = async (sender_psid, course) => {
   // Construct the message body
+  let user_info = await getInfo.getProfileDetails(sender_psid);
+  let userName = user_info.first_name
+  console.log(userName);
   let request_body = {
     "recipient":{
     "id":sender_psid
   },
   "message":{
-    "text": `Do you have a homework for ${course}?`,
+    "text": `Hey ${userName}! your ${course} class just ended. Do you have any homework?`,
     "quick_replies":[
       {
    "content_type":"text",

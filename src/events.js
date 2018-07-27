@@ -2,6 +2,7 @@ const message = require('./message');
 const apiAi = require('./apiai');
 const getInfo = require('./getInfo');
 const broadcast = require('./broadcast');
+const INTENTS = require('./constants/index');
 
 const config = require('../config/config');
 
@@ -29,16 +30,16 @@ module.exports.handleMessage = async (sender_psid, received_message, id) => {
           }
           message.callSendAPI(sender_psid, response)
         }
-        else if(received_message.text === 'Library Hours'){
+        else if(received_message.text === INTENTS.intents.library){
           apiAi.sendToApiAi('get-library-hours',id);
         }
-        else if(received_message.text === 'Weekly Events'){
+        else if(received_message.text === INTENTS.intents.events){
           apiAi.sendToApiAi('get-week-events',id);
         }
-        else if(received_message.text === 'Majors'){
+        else if(received_message.text === INTENTS.intents.majors){
           apiAi.sendToApiAi('get-majors',id);
         }
-        else if(received_message.text === 'Hi!!'){
+        else if(received_message.text === INTENTS.intents.hi){
           apiAi.sendToApiAi(text,id);
         }
 
@@ -97,9 +98,9 @@ module.exports.handlePostback= async (sender_psid, received_postback) => {
    //Set the response based on the postback payload
    if (payload === 'Get Started') {
 
-     response = {"text": `Hello ${user_info.first_name}, I am your Caldwell University smart assistant.`};
-     response1 = {"text": "You can get college info, happening events, admission facts, and courses offered at Caldwell College."};
-     response2 = {"text": "You can also easily set up your courses on http://cougarbot-site.herokuapp.com/ and get notified about your homeworks."};
+     response = {"text": `Hey  ${user_info.first_name}, I am your Caldwell University Smart Assistant  🤖.`};
+     response1 = {"text": "You can get college info and events, admission details, and courses offered."};
+     response2 = {"text": "Also, we  support homework reminder feature. Check out http://cougarbot-site.herokuapp.com to find more details."};
 
 
       message.callSendAPI(sender_psid, response).then(() =>{

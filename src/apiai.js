@@ -158,15 +158,57 @@ module.exports.sendToApiAi = (text, id, courseName) => {
          },500);
 
          // change psid to asid to match our database
-         let asid = await getInfo.getUserASID(id)
-         let current_day = await homework.get_current_date()
-
-         firebase.db.ref('user_courses/'+ asid + "/" + current_day + '/' + homeworkDesc.course).update({
+         let current_day = await homework.homework_features.day
+         console.log(current_day);
+         firebase.db.ref('user_courses/'+ id + "/" + current_day + '/' + homeworkDesc.course).update({
            deadline:  homeworkDesc.deadline,
            homework: homeworkDesc.homework
          });
          console.log("Database updated");
          break;
+
+         // to get list of homeworks
+         case 'get-homework-list':
+         console.log(id);
+            firebase.db.ref('/user_courses'+ '/' +  id).once('value').then(async function(snapshot){
+              let res = []
+              let user_obj = await snapshot.val();
+              for(var each_day in user_obj){
+                for(var each_course in user_obj[each_day]){
+                  if(user_obj[each_day][each_course].homework){
+                    console.log(user_obj[each_day][each_course].homework);
+                    let homework = user_obj[each_day][each_course].homework
+                    let deadline = user_obj[each_day][each_course].deadline
+                    if(deadline.time){
+                      res.push(`Your homework for ${each_course} is "${homework}", which is due on ${deadline.date} at ${deadline.time}.`)
+                    } else{
+                      res.push(`Your homework for ${each_course} is "${homework}", which is due on ${deadline.date}.`)
+                    }
+                  }
+                }
+              }
+
+              // send the response
+              if(res.length){
+                for(var each_homework of res){
+                  response = {
+                    "text": each_homework
+                  }
+                  message.callSendAPI(id,response);
+                }
+              } else{
+                response = {
+                  "text": "You do not have any homework. Enjoy!"
+                };
+                message.callSendAPI(id, response);
+              }
+
+
+
+            })
+
+            break
+
 
       default:
         response = {
